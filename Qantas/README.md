@@ -226,5 +226,18 @@ POM.xml
   <td></td>
  </tr>
 </table>
-Reports will be stored in the html:target/report/html
+Reports will be stored in the html:target/report/html\
+
+Tear Down : Closed down the webdriver instances . This will get executed after execution of each scenario.
+
+ @After
+    public void afterScenario(Scenario scenario) {
+        System.out.println(scenario.getName());
+        capturedVariables( scenario );
+        if (scenario.isFailed()) {
+           failedScenarioReporting( scenario );
+        }
+        Shared.killWebDriver(sessionName);
+    }
+
 
