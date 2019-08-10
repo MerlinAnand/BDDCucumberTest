@@ -78,7 +78,7 @@ public class JunitParallel {
 
 Page Object Model:
 
-Each Page holds the Page Objects and those are instantiated thru PageFactory
+Java Page holds the PageObjects and those are instantiated through  PageFactory. Please refer below code snippet.
 
 Code Snippet:
     @FindBy(xpath = "//div[@class='qfa1-submit-button__container-right widget-form__group-container size-big']")
