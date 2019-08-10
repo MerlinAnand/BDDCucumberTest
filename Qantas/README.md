@@ -76,15 +76,33 @@ public class JunitParallel {
 }
 
 
-Objects Locator
-Objects and the corresponding locators are stored in XL within the project directory.
-Object Names are unique in the spreadsheet.
+Page Object Model:
 
-Object	            Locator
-PlanHeaders	        classname=ComparablePlanList__header-bar
+Each Page holds the Page Objects and those are instantiated thru PageFactory
+
+Code Snippet:
+    @FindBy(xpath = "//div[@class='qfa1-submit-button__container-right widget-form__group-container size-big']")
+    WebElement flightSearchObjectbtn;
+
+    @FindBy(xpath = "//*[@id=\"collapsibleCard0\"]/div[2]/cart-collapsible-card-footer/cart-flights-subtotal/div/div[1]/div[2]/div/cart-subtotal-row/span[1]")
+    WebElement txtSubtotal;
+
+    @FindBy(xpath = "//*[@id=\"flight-form\"]/form[1]/div[3]/div/div[5]/div/div[2]/div/div[4]/div[1]/table/tbody/tr[1]/th")
+    WebElement flightDateFromMonthFirstObject;
+
+    @FindBy(xpath = "//*[@id=\"flight-form\"]/form[1]/div[3]/div/div[5]/div/div[2]/div/div[4]/div[2]/table/tbody/tr[1]/th")
+    WebElement flightDateFromMonthSecondObject;
+
+    @FindBy(xpath = "//*[@id=\"flight-form\"]/form[1]/div[3]/div/div[5]/div/div[2]/div/div[4]/div[1]/table")
+    WebElement flightDateFromMonthFirstTableObject;
+
+    @FindBy(xpath = "//*[@id=\"flight-form\"]/form[1]/div[3]/div/div[5]/div/div[2]/div/div[4]/div[2]/table")    WebElement flightDateFromMonthSecondTableObject;
 
 
-
+    public HomePage() throws NoSuchMethodException {
+        PageFactory.initElements(driver, this);
+        getDateFromPicker = new GetDateFromPicker();
+    }
 
 
 
@@ -208,5 +226,5 @@ POM.xml
   <td></td>
  </tr>
 </table>
-Reports will be stored in the html:target/cucumber-reports
+Reports will be stored in the html:target/report/html
 
