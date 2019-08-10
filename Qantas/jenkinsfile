@@ -1,0 +1,83 @@
+pipeline{
+
+  agent{
+    label ('')
+  }
+
+  parameters{
+
+     choice( name: "Environment", choices: ["ST",""DEV","SIT","PRE","PRD"], description: "Environment selector")
+
+     string( name: "Threads", default: "5", description: "Number of parallel threads" )
+
+     choice( name: "Test_Target", choices:["Chrome.Win10","Chrome.macOS","Firefox.Win10","Firefox.macOS","Safari.macOS","IE.Win10","Safari.iPhone8.iOS10","Safari.iPhoneX.iOS10","Safari.iPhone8P.iOS10","Safari.iPhoneXP.iOS10","Safari.iPhoneXR.iOS10","Safari.iPhoneXS.iOS10","Safari.iPad.iOS10","Safari.iPhone8.iOS11","Safari.iPhoneX.iOS11","Safari.iPhone8P.iOS11","Safari.iPhoneXP.iOS11","Safari.iPhoneXR.iOS11","Safari.iPhoneXS.iOS11","Safari.iPad.iOS11","Safari.iPhone8.iOS12","Safari.iPhoneX.iOS12","Safari.iPhone8P.iOS12","Safari.iPhoneXP.iOS12","Safari.iPhoneXR.iOS12","Safari.iPhoneXS.iOS12","Safari.iPad.iOS12","Chrome.Nexus5X.And8","Chrome.Nexus5X.And9","Chrome.Nexus6P.And8","Chrome.Nexus6P.And9","Chrome.Pixel2.And8","Chrome.Pixel2.And9","Chrome.Pixel3.And8","Chrome.Pixel3.And9","Samsung.GalaxyS8.And8","Samsung.GalaxyS9.And8","Samsung.GalaxyS8.And9","Samsung.GalaxyS9.And9" ], defaultValue: "Chrome.Win10", description: "target browser/device short name" )
+
+     string( name: "Cucumber_Tags", defaultValue: "", description: "test tags to run" )
+
+     choice( name: "Post_Step_Image_Grab",choices["OFF","ON" ], description: "Controls per step screen grabs" )
+
+     string( name: "Selenium_implicit_timeout", defaultValue: "20", description: "Value for find elements and page waits" )
+
+     string( name: "Selenium_explicit_timeout", defaultValue; "20", description: "Value for WebDriverWait statements" )
+
+     string( name: "Selenium_Hub", defaultValue: "", description: "Used to turn remote web driver on and point to a selenium grid, empty forces use of local chrome only" )
+
+     String( name: "Eyes_Key", defaultValue: "z8jrFsWtXjWBhqIoLYshVcEdG9ObRDSo4247SYlOC90110", description: "Turns eyes on if not blank" )
+
+     choice( name: "Eyes_Mode", choices["",""baseline"], description: "force eyes baseline")
+
+     String( name: "Jira_API_Url", defaultValue: "", description: "Jira end point for writing to Jira, empty is off")
+
+     String( name: "Jira_User", defaultValue: "", description: "Jira user for writing results to Jira" )
+
+     String( name: "Jira_User_Password", defaultValue: "", description: "Jira user password - get from Jenkins or SSM" )
+  }
+
+  stages{
+    stage ('UI Test'){
+        script{
+
+            env[Environment]=params.Environment
+            env[Threads]=params.Threads
+            env[Test_Target]=params.Test_Target
+            env[Cucumber_Tags]=params.Cucumber_Tags]
+            env[Post_Step_Image_Grab]=params.Post_Step_Image_Grab
+            env[Selenium_implicit_timeout]=params.Selenium_implicit_timeout
+            env[Selenium_explicit_timeout]=params.Selenium_explicit_timeout
+            env[Selenium_Hub]=params.Selenium_Hub
+            env[Eyes_Key]=params.Eyes_Key
+            env[Eyes_Mode]=params.Eyes_Mode
+            env[Jira_API_Url]=params.Jira_API_Url
+            env[Jira_User]=params.Jira_User
+            env[Jira_User_Password]=params.Jira_User_Password
+
+            sh 'mvn clean test \
+            -Denvironment.name=${Environment} /
+            -Dfork.count=${Threads} /
+            -Dtarget.capabilities=${Test_Target} /
+            -Dcucumber.options=-"-tags ${Cucumber_Tags}" /
+            -Dstep.image.grab=${Post_Step_Image_Grab} /
+            -Dbrowser.implicit.timeout=${Selenium_implicit_timeout} /
+            -Dbrowser.explicit.wait=${Selenium_explicit_timeout} /
+            -Dhub.url=${Selenium_Hub} /
+            -Dapplitools.api.key=${Eyes_Key} /
+            -Dapplitools.api.mode=${Eyes_Mode} /
+            -Djira.api.url=${Jira_API_Url} /
+            -Djira.user=${Jira_User} /
+            -Djira.password=${Jira_User_Password}'
+        }
+    }
+
+    post{
+      fail{
+
+      }
+      always{
+            cucumber jsonReportDirectory: 'target/report/json', fileIncludePattern: '**/*.json', sortingMethod: 'ALPHABETICAL'
+            cucumber htmlReportDirectory: 'target/report/html', fileIncludePattern: '**/*.*', sortingMethod: 'ALPHABETICAL'
+            archiveArtifacts 'target/**'
+      }
+    }
+  }
+
+}

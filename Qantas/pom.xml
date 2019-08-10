@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>BDDTest</groupId>
+    <artifactId>testaplication</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+
+        <!-- project dependency configured versions -->
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <selenium.java.version>3.5.3</selenium.java.version>
+        <bonigarcia.java.version>3.4.0</bonigarcia.java.version>
+        <cucumber.java.version>4.3.1</cucumber.java.version>
+
+
+        <!-- internal project values -->
+        <project.basedir>${project.basedir}</project.basedir>
+        <timestamp>${maven.build.timestamp}</timestamp>
+        <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ssSSS</maven.build.timestamp.format>
+
+        <!-- Running characteristics -->
+        <fork.count>5</fork.count>
+        <reuseForks>true</reuseForks>
+        <parallel/>
+
+        <!-- Selenium Settings -->
+        <browser.implicit.timeout>20</browser.implicit.timeout>
+        <browser.explicit.wait>20</browser.explicit.wait>
+        <hub.url></hub.url>
+
+        <!-- applitools eyes-->
+        <applitools.api.key>z8jrFsWtXjWBhqIoLYshVcEdG9ObRDSo4247SYlOC90110</applitools.api.key>
+        <applitools.api.mode></applitools.api.mode>
+
+        <!-- test settings -->
+        <environment.name>PRD</environment.name>
+        <target.capabilities>Chrome.Win.10</target.capabilities>
+        <step.image.grab>ON</step.image.grab>
+
+        <!-- Jira connector -->
+        <jira.api.url></jira.api.url>
+        <jira.user></jira.user>
+        <jira.password></jira.password>
+
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.0</version>
+                <configuration>
+                    <testFailureIgnore>true</testFailureIgnore>
+                    <includes>
+                        <include>cucumber.run.JunitParallel</include>
+                    </includes>
+                    <systemPropertyVariables>
+                        <project.reporting.outputEncoding>${project.reporting.outputEncoding}</project.reporting.outputEncoding>
+
+                        <fork.count>${fork.count}</fork.count>
+                        <reuseForks>${reuseForks}</reuseForks>
+                        <parallel>${parallel}</parallel>
+
+                        <!-- project specific variables-->
+                        <hub.url>${hub.url}</hub.url>
+                        <target.capabilities>${target.capabilities}</target.capabilities>
+
+                        <!-- Selenium Settings -->
+                        <browser.timeout>${browser.implicit.timeout}</browser.timeout>
+                        <browser.explicit.wait>${browser.explicit.wait}</browser.explicit.wait>
+                        <hub.url>${hub.url}</hub.url>
+
+                        <!-- applitools eyes-->
+                        <applitools.server.uri>https://vhaeyes.applitools.com</applitools.server.uri>
+                        <applitools.api.key>${applitools.api.key}</applitools.api.key>
+                        <applitools.api.mode>${applitools.api.mode}</applitools.api.mode>
+
+                        <!-- test settings -->
+                        <environment.name>${environment.name}</environment.name>
+                        <target.capabilities>${target.capabilities}</target.capabilities>
+                        <step.image.grab>${step.image.grab}</step.image.grab>
+
+                        <!-- Jira connector -->
+                        <jira.api.url>${jira.api.url}</jira.api.url>
+                        <jira.user>${jira.user}</jira.user>
+                        <jira.password>${jira.password}</jira.password>
+
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+
+
+
+        <!-- Cucumber -->
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java8</artifactId>
+            <version>${cucumber.java.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit</artifactId>
+            <version>${cucumber.java.version}</version>
+        </dependency>
+
+        <!-- Selenium/Appium -->
+        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenium.java.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-remote-driver -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-remote-driver</artifactId>
+            <version>${selenium.java.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>${bonigarcia.java.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.appium/java-client -->
+        <dependency>
+            <groupId>io.appium</groupId>
+            <artifactId>java-client</artifactId>
+            <version>5.0.4</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>3.0.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.testng/testng -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>6.13.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.javafaker</groupId>
+            <artifactId>javafaker</artifactId>
+            <version>0.16</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.7</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/commons-lang/commons-lang -->
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/joda-time/joda-time -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.10</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.json/json -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20180130</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.json</groupId>
+            <artifactId>javax.json-api</artifactId>
+            <version>1.1</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>23.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.17</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.17</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/net.serenity-bdd/serenity-cucumber -->
+        <dependency>
+            <groupId>net.serenity-bdd</groupId>
+            <artifactId>serenity-cucumber</artifactId>
+            <version>1.1.36</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+
+
+    </dependencies>
+
+</project>

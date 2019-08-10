@@ -1,0 +1,32 @@
+pipeline{
+    // PR approval is the trigger for this file to run
+
+    agent{
+        label("Automation")
+    }
+    parameters{
+
+    }
+
+    stages{
+        stage("Code and Vulnerability Check"){
+            // use SonarCloud or other VHA tool to check the code base before allowing it to push to master
+        }
+        stage("Build and Run"){
+            //tests must pass before push to master
+            sh "
+            mvn test
+            "
+        }
+        stage("Push to master"){
+        }
+    }
+    post{
+        fail{
+        }
+        always{
+        //get the test reports from the run
+        }
+    }
+
+}
